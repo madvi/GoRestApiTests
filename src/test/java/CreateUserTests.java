@@ -38,18 +38,12 @@ public class CreateUserTests {
         CreateUserRequestBody requestBody = CreateUserRequestBody.builder().email(email)
                                             .gender(gender).name(name).status(status).build();
 
-        CreateUserResponse createUserResponse = usersClient.CreateUser(requestBody);
-        Assert.assertEquals(createUserResponse.getStatusCode(),201);
-        Assert.assertNotNull(createUserResponse.getData().getId());
-        Assert.assertEquals(createUserResponse.getData().getEmail(),requestBody.getEmail());
-
         //2.Act
-               /* .then()
-                .log().body()
+        CreateUserResponse createUserResponse = usersClient.CreateUser(requestBody);
 
         //3.Assert
-                .statusCode(201)
-                .body("data.id", Matchers.notNullValue());*/
+        createUserResponse.assertUser(requestBody);
+
 
     }
 
@@ -60,31 +54,17 @@ public class CreateUserTests {
         String name = "Vinutha";
         String gender = "female";
         String status = "active";
-        /*
-        String body = String.format("{\n" +
-                "    \"name\": \"Maadevi\",\n" +
-                "    \"gender\": \"male\",\n" +
-                "    \"email\": \"%s\",\n" +
-                "    \"status\": \"active\"\n" +
-                "}",email);*/
 
         //CreateUserRequestBody requestBody = new CreateUserRequestBody(name,gender,email,status);
         CreateUserRequestBody requestBody = CreateUserRequestBody.builder().email(email)
                 .gender(gender).name(name).status(status).build();
 
+        //2.Act
         //createUser is now returning response as createUserResponse so taking it to  a variable
         CreateUserResponse createUserResponse = usersClient.CreateUser(requestBody);
-        Assert.assertEquals(createUserResponse.getStatusCode(),201);
-        Assert.assertNotNull(createUserResponse.getData().getId());
-        Assert.assertEquals(createUserResponse.getData().getEmail(),requestBody.getEmail());
-
-        //2.Act
-                /*.then()
-                .log().body()
 
         //3.Assert
-                .statusCode(201)
-                .body("data.id", Matchers.notNullValue());*/
+        createUserResponse.assertUser(requestBody);
 
     }
 
