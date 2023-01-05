@@ -1,6 +1,8 @@
 import Users.Create.CreateUserRequestBody;
+import Users.Create.Response.CreateUserResponse;
 import Users.UsersClient;
 import org.hamcrest.Matchers;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -36,16 +38,18 @@ public class CreateUserTests {
         CreateUserRequestBody requestBody = CreateUserRequestBody.builder().email(email)
                                             .gender(gender).name(name).status(status).build();
 
-        usersClient
-                .CreateUser(requestBody)
+        CreateUserResponse createUserResponse = usersClient.CreateUser(requestBody);
+        Assert.assertEquals(createUserResponse.getStatusCode(),201);
+        Assert.assertNotNull(createUserResponse.getData().getId());
+        Assert.assertEquals(createUserResponse.getData().getEmail(),requestBody.getEmail());
 
         //2.Act
-                .then()
+               /* .then()
                 .log().body()
 
         //3.Assert
                 .statusCode(201)
-                .body("data.id", Matchers.notNullValue());
+                .body("data.id", Matchers.notNullValue());*/
 
     }
 
@@ -68,17 +72,19 @@ public class CreateUserTests {
         CreateUserRequestBody requestBody = CreateUserRequestBody.builder().email(email)
                 .gender(gender).name(name).status(status).build();
 
-
-        usersClient
-                .CreateUser(requestBody)
+        //createUser is now returning response as createUserResponse so taking it to  a variable
+        CreateUserResponse createUserResponse = usersClient.CreateUser(requestBody);
+        Assert.assertEquals(createUserResponse.getStatusCode(),201);
+        Assert.assertNotNull(createUserResponse.getData().getId());
+        Assert.assertEquals(createUserResponse.getData().getEmail(),requestBody.getEmail());
 
         //2.Act
-                .then()
+                /*.then()
                 .log().body()
 
         //3.Assert
                 .statusCode(201)
-                .body("data.id", Matchers.notNullValue());
+                .body("data.id", Matchers.notNullValue());*/
 
     }
 

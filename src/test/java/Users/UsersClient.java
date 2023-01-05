@@ -1,14 +1,32 @@
 package Users;
 
 import Users.Create.CreateUserRequestBody;
+import Users.Create.Response.CreateUserErrorResponse;
+import Users.Create.Response.CreateUserResponse;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
 public class UsersClient {
-    public Response CreateUser(CreateUserRequestBody body) {
-        return given()
+    public CreateUserResponse CreateUser(CreateUserRequestBody body) {
+        Response response = create(body);
+        //Asking RestAssured to return response of type CreateUserResponse
+        CreateUserResponse createUserResponse = response.as(CreateUserResponse.class);
+        createUserResponse.setStatusCode(response.statusCode());
+
+        return createUserResponse;
+    }
+
+    public CreateUserErrorResponse UserExpectingError(CreateUserRequestBody body){
+        Response response = create(body);
+        CreateUserErrorResponse errorResponse = response.as(CreateUserErrorResponse.class);
+        errorResponse.setStatusCode(response.statusCode());
+        return errorResponse;
+    }
+    //This method will return plain RestAssured response
+    public static Response create(CreateUserRequestBody body) {
+        Response response = given()
 
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
@@ -17,6 +35,12 @@ public class UsersClient {
                 //2.Act
                 .when()
                 .post("https://gorest.co.in/public/v1/users");
+
+        response.then()
+                .log().body();
+
+        return
+                response;
     }
 
     public static Response GetAllUsers() {
