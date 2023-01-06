@@ -1,5 +1,7 @@
+import Users.GetAll.GetAllUsersResponse;
 import Users.UsersClient;
 import org.hamcrest.Matchers;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -18,17 +20,14 @@ public class GetUserTest {
     @Test
     public void ShouldGetAllUsers(){
         //1.Arrange
-        usersClient.GetAllUsers()
+        GetAllUsersResponse getAllUsersResponse = usersClient.GetAllUsers();
+        Assert.assertEquals(getAllUsersResponse.getStatusCode(),200);
+        Assert.assertEquals(getAllUsersResponse.getDataList().size(),10);
+        Assert.assertTrue(getAllUsersResponse.hasMaleUser());
 
-        //2.Act
-                .then()
-                .log().body()
 
         //3.Assert...
 
-                .statusCode(200)
-                .body("data",Matchers.hasSize(10))
-                .body("data",Matchers.hasItem(Matchers.hasEntry("gender","male")));
 
 
     }

@@ -3,6 +3,7 @@ package Users;
 import Users.Create.CreateUserRequestBody;
 import Users.Create.Response.CreateUserErrorResponse;
 import Users.Create.Response.CreateUserResponse;
+import Users.GetAll.GetAllUsersResponse;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -43,10 +44,21 @@ public class UsersClient {
                 response;
     }
 
-    public static Response GetAllUsers() {
-        return given()
+    //Refactoring code to return GetAllUsersResponse instead of plain restAssured response
+    public static GetAllUsersResponse GetAllUsers() {
+        Response response = given()
 
                 .when()
-                .get("https://gorest.co.in/public/v1/users");
+                    .get("https://gorest.co.in/public/v1/users");
+
+        response
+                .then()
+                    .log().body();
+
+       int statusCode =  response.statusCode();
+       GetAllUsersResponse getAllUsersResponse = response.as(GetAllUsersResponse.class);
+       getAllUsersResponse.setStatusCode(statusCode);
+
+        return getAllUsersResponse;
     }
 }
